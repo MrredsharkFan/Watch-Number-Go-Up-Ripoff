@@ -64,7 +64,7 @@ function barText(x) {
 function buyUpg() {
     if (player.points.gte(upgCost(player.upg))) {
         player.points = player.points.sub(upgCost(player.upg))
-        if (buyMax().sub(player.upg).gte(15)) { player.upg = buyMax().sub(15) }
+        if (buyMax().sub(player.upg).gte(15)) { player.upg = buyMax().sub(10) }
         else { player.upg = player.upg.add(1) }
     }
 }
