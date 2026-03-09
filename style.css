@@ -39,10 +39,34 @@ html{
     background-color: #ccccee
 }
 
-.reb_text{
+.reb_stuff{
     position: absolute;
     right: 0%;
     top: 30%;
     text-align: center;
-    width: 50%
+    width: 50%;
+    height: 100%
+}
+
+.rup_upg{
+    position: absolute;
+    background-color: #ee9955;
+    width: 100%;
+    height: 100%;
+}
+
+.rup_upg>button{
+    position: absolute;
+    width: 10%;
+    height: 10%;
+    font-size: 10px;
+}
+
+.rarity_container{
+    position: fixed;
+    width: 100%;
+    height: 3%;
+    z-index: 15;
+    top: 7%;
+    white-space: nowrap;
 }
