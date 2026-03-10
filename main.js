@@ -39,8 +39,10 @@ function getPPS() {
 
 function upgEffect(x) {
     var l = [x]
+    var m = [x]
     while (true) {
-        l = l.concat(l[l.length-1].div(5).floor())
+        l = l.concat(l[l.length - 1].div(5).floor())
+        m = m.concat(m[m.length - 1].div(5**m.length).ceil().times(5**m.length))
         if (l[l.length-1].lte(0)){break}
     }
     l = l.map(x => x.mod(5)) //new function unlocked :3
@@ -48,7 +50,7 @@ function upgEffect(x) {
     for (i in l) {
         r = r.add(Decimal.pow(7,i).times(l[i]))
     }
-    return [l,new Decimal.pow(1.1,r)]
+    return [l,new Decimal.pow(1.1,r),m]
 }
 
 function upgCost(x) {
@@ -60,10 +62,13 @@ function buyMax() {
 }
 
 function barText(x) {
+    var r = upgEffect(x)[2]
     var x = upgEffect(x)[0]
     var t = ""
     for (i in x) {
-        t = t + `<div style="position: absolute; top: ${i * 3 + 35}%; height: 3%; width: 50%">${x[i]}/5 <span style="color: #555; font-size: 11px">(x${format(Decimal.pow(1.1, Decimal.pow(7, i)))} for each)</span><div style="z-index: -10000; position: absolute; top: 0%;height: 100%; width: ${x[i].times(20)}%; background-color: ${cl(i)}"></div></div>`
+        var f = x[i].times(20)
+        var g = i
+        t = t + `<div style="position: absolute; top: ${i * 3 + 35}%; height: 3%; width: 50%">${x[i]}/5<span style="color: #555; font-size: 9px">(x${format(Decimal.pow(1.1, Decimal.pow(7, i)))} for each, in ${formatTime(timeLeft(r[i]))})</span><div style="z-index: -10000; position: absolute; top: 0%;height: 100%; width: ${f}%; background-color: ${cl(g)}"></div></div>`
     }
     return t
 }
@@ -125,7 +130,7 @@ function buyRUpg(u) {
         var u = u.split("_")
         var p = u.join("_")
         console.log(u, p)
-        if (player.rup_spent.add(RUpgCost(p)).lt(rupp()[0])&&player.rup[p].eq(0)) {
+        if (player.rup_spent.add(RUpgCost(p)).lte(rupp()[0])&&player.rup[p].eq(0)) {
             player.rup_spent = player.rup_spent.add(RUpgCost(p))
             player.rup[p] = new Decimal(1)
             if (u[1] == 1) {
@@ -201,11 +206,18 @@ function rarityThing() {
     document.getElementById("rar_text").innerHTML = `Tier ${rarityBar()[0]} (${(rarityBar()[1]*100).toFixed(2)}% to next [${threshold[rarityBar()[0]]}])`
 }
 
-document.getElementById("rUpg").innerHTML = rupButtonGen()
+function timeLeft(j=player.upg) {
+    return upgCost(j).sub(player.points).div(getPPS()).max(0)
+}
 
+document.getElementById("rUpg").innerHTML = rupButtonGen()
+fps = 0
 function update(dt) {
+    last_updated = Date.now()
+    fps = fps+ (1 / dt-fps)/(1/dt**0.5)
+    document.getElementById("fps").innerHTML = Math.floor(fps)+" fps"
     document.getElementById("point_display").innerHTML = `<b style="font-size: 25px">${format(player.points)}</b> points (${format(getPPS())}/s)`
-    document.getElementById("upg").innerHTML = `<b>Boost your point gain!</b><br>Cost: $${format(upgCost(player.upg))}<br><br>Bought: ${format(player.upg)}`
+    document.getElementById("upg").innerHTML = `<b>Boost your point gain!</b><br>Cost: $${format(upgCost(player.upg))}<br><br>Bought: ${format(player.upg)}<br><i>Time left: ${formatTime(timeLeft())}</i>`
     document.getElementById("bars").innerHTML = barText(player.upg)
     document.getElementById("reb").innerHTML = rpText()
     document.getElementById("reb_text").innerHTML = `${format(player.rp)} Rebirth points<hr>x${format(rpBoost())} Points`
@@ -223,7 +235,6 @@ function save() {
 last_updated = Date.now()
 function main() {
     update((Date.now() - last_updated) / 1000)
-    last_updated = Date.now()
 }
 
 setInterval(main,1)
