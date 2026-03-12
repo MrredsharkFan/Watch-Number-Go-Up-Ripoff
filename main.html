@@ -8,20 +8,27 @@
     </head>
 
     <body>
+        <div style="position: fixed; bottom: 0%"><button onclick="hardReset()">HARD RESET</button><span id="tabs"></span><br></div>
         <span id="fps" style="opacity: 20%; position: fixed; z-index: 22"></span>
         <div class="point_box">
             <span id="point_display"></span>
-            <button onclick="hardReset()">HARD RESET</button><br>
         </div>
         <span id="rar_text" class="rarity_container"></span>
-        <button class="upg" id="upg" onclick="buyUpg()"></button>
+        <div id="Main">
         <button class="reb" id="reb" onclick="rebirth()"></button>
+        <button class="upg" id="upg" onclick="buyUpg()"></button>
         <div class="reb_stuff">
             <span id="reb_text"></span><br>
             <span id="rup_text"></span><br>
             <div class="rup_upg" id="rUpg"></div>
         </div>
         <span id="bars"></span>
+        </div>
+        <div id="Lootboxes" style="visibility:hidden">
+            <div style="position: absolute; top: 20%">
+                <span id="rup_text_2"></span>
+            </div>
+        </div>
     </body>
 
     <script src="format.js"></script>

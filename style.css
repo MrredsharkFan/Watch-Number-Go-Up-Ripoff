@@ -8,9 +8,9 @@ html{
 .point_box{
     position: fixed;
     width:100%;
-    height: 10%;
+    height: 8%;
     text-align: center;
-    background-color: #ffddcc;
+    background-color: #eeeeee;
     z-index: 5;
 }
 
@@ -22,7 +22,7 @@ html{
     height: 15%;
     border-radius: 0px;
     background-color: #aaaacc;
-    transition-duration: 0.2s
+    transition-duration: 0s
 }
 
 .reb{
@@ -48,6 +48,10 @@ html{
     height: 100%
 }
 
+.reb:hover {
+    background-color: #ff8855
+}
+
 .rup_upg{
     position: absolute;
     background-color: #ee9955;
@@ -64,9 +68,10 @@ html{
 
 .rarity_container{
     position: fixed;
-    width: 100%;
-    height: 3%;
-    z-index: 15;
-    top: 7%;
+    left: 25%;
+    width: 50%;
+    height: 2.5%;
+    z-index: 12;
+    top: 5%;
     white-space: nowrap;
 }

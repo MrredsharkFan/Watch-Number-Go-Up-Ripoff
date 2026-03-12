@@ -1,6 +1,8 @@
 color_loop = ["#fcc","#ebd","#dae","#cbf","#bcf","#adf","#9ef","#aee","#bed","#cec","#ddb","#edb","#fdc"]
 rarity_loop = ["#aaa","#ccc","#eee","#9f9","#afa","#cfc","#9bf","#bdf","#dff","#a9f","#caf","#ecf","#e95","#fb7","#fd9","#f99","#fbb","#fdd","#f7f","#faf","#fcf","#ff7","#ffa","#ffd","#77f","#aaf","#ddf","#f7a","#fac","#fdf","#4bc","#7de","#9ef"]
 
+tabs = ["Main", "Lootboxes"]
+current_tab = "Main"
 
 function cl(x) {
     return color_loop[new Decimal(x).mod(color_loop.length)]
@@ -201,7 +203,7 @@ function rarityBar() {
 }
 
 function rarityThing() {
-    document.getElementById("rar_text").style.width = rarityBar()[1] * 100 + "%"
+    document.getElementById("rar_text").style.width = rarityBar()[1] * 50 + "%"
     document.getElementById("rar_text").style["background-color"] = rarity_loop[rarityBar()[0]]
     document.getElementById("rar_text").innerHTML = `Tier ${rarityBar()[0]} (${(rarityBar()[1]*100).toFixed(2)}% to next [${threshold[rarityBar()[0]]}])`
 }
@@ -210,19 +212,34 @@ function timeLeft(j=player.upg) {
     return upgCost(j).sub(player.points).div(getPPS()).max(0)
 }
 
+function change_tab(t) {
+    document.getElementById(current_tab).style["visibility"] = "hidden"
+    document.getElementById(t).style["visibility"] = "visible"
+    current_tab = t
+}
+
+function tabGeneration() {
+    for (i in tabs) {
+        document.getElementById("tabs").innerHTML += `<button onclick=change_tab("${tabs[i]}")>${tabs[i]}</button>`
+    }
+}
+tabGeneration()
+
 document.getElementById("rUpg").innerHTML = rupButtonGen()
 fps = 0
 function update(dt) {
     last_updated = Date.now()
-    fps = fps+ (1 / dt-fps)/(1/dt**0.5)
+    fps = fps + (1 / dt - fps) / (1 / dt ** 0.5)
+    updateUpg()
     document.getElementById("fps").innerHTML = Math.floor(fps)+" fps"
     document.getElementById("point_display").innerHTML = `<b style="font-size: 25px">${format(player.points)}</b> points (${format(getPPS())}/s)`
-    document.getElementById("upg").innerHTML = `<b>Boost your point gain!</b><br>Cost: $${format(upgCost(player.upg))}<br><br>Bought: ${format(player.upg)}<br><i>Time left: ${formatTime(timeLeft())}</i>`
     document.getElementById("bars").innerHTML = barText(player.upg)
     document.getElementById("reb").innerHTML = rpText()
     document.getElementById("reb_text").innerHTML = `${format(player.rp)} Rebirth points<hr>x${format(rpBoost())} Points`
     document.getElementById("rup_text").innerHTML = `${format(rupp()[0].sub(player.rup_spent))} / ${format(rupp()[0])}, next at ${format(rupp()[1])} RP`
-    updateUpg()
+    document.getElementById("upg").innerHTML = `<b>Boost your point gain!</b><br>Cost: $${format(upgCost(player.upg))}<br><br>Bought: ${format(player.upg)}<br><i>Time left: ${formatTime(timeLeft())}</i>`
+    //lootboxes
+    document.getElementById("rup_text_2").innerHTML = document.getElementById("rup_text").innerHTML
     rarityThing()
     rUpgTick(dt)
     player.points = player.points.add(getPPS().times(dt))
