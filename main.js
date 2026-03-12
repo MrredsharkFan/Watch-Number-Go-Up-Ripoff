@@ -14,11 +14,15 @@ function initPlayer() {
         upg: new Decimal(0),
         rp: new Decimal(0),
         rup_spent: new Decimal(0),
-        rup: {"1_1":new Decimal(0)},
+        rup: { "1_1": new Decimal(0) }
     }
 }
 
 player = (typeof (localStorage.getItem("wngu-r")) != null ? JSON.parse(localStorage.getItem("wngu-r")) : initPlayer())
+//check twice
+for (i in initPlayer()) {
+    if (typeof(player[i])=="undefined"){player[i] = initPlayer()[i]}
+}
 for (i in player) {
     if (i != "rup") { player[i] = new Decimal(player[i]) }
 }
