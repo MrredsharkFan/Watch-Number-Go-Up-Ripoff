@@ -7,7 +7,7 @@
         <script src="break_eternity.min.js"></script>
     </head>
 
-    <body>
+    <body onkeypress="press(event)">
         <div style="position: fixed; bottom: 0%"><button onclick="hardReset()">HARD RESET</button><span id="tabs"></span><br></div>
         <span id="fps" style="opacity: 20%; position: fixed; z-index: 22"></span>
         <div class="point_box">
@@ -28,6 +28,7 @@
             <div style="position: absolute; top: 20%">
                 <span id="rup_text_2"></span>
             </div>
+            <span style="position: absolute; width: 100%; top: 50%; font-family: monospace; font-size: 30px; background-color: #ccc" id="typing_field"></span>
         </div>
     </body>
 

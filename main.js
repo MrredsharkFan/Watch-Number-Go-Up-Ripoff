@@ -14,7 +14,8 @@ function initPlayer() {
         upg: new Decimal(0),
         rp: new Decimal(0),
         rup_spent: new Decimal(0),
-        rup: { "1_1": new Decimal(0) }
+        rup: { "1_1": new Decimal(0) },
+        typed: new Decimal(0)
     }
 }
 
@@ -23,9 +24,11 @@ player = (typeof (localStorage.getItem("wngu-r")) != null ? JSON.parse(localStor
 for (i in initPlayer()) {
     if (typeof(player[i])=="undefined"){player[i] = initPlayer()[i]}
 }
+
 for (i in player) {
-    if (i != "rup") { player[i] = new Decimal(player[i]) }
+    if (typeof(player[i])=="string") { player[i] = new Decimal(player[i]) }
 }
+
 for (i in player.rup) {
     player.rup[i] = new Decimal(player.rup[i])
 }
@@ -216,6 +219,19 @@ function timeLeft(j=player.upg) {
     return upgCost(j).sub(player.points).div(getPPS()).max(0)
 }
 
+t = "Typemetogetpoints"
+
+function press(event) {
+    var k = event.key
+    if (current_tab == "Lootboxes") {
+        if (k == t[0]) {
+            t = t.slice(1)
+            t = t+"abcdefghijklmnopqrstuvwxyz1234567890QWERTYUIOPASDFGHJKLZXCVBNM"[Math.floor(Math.random()*62)]
+            player.typed = player.typed.add()
+        }
+    }
+}
+
 function change_tab(t) {
     document.getElementById(current_tab).style["visibility"] = "hidden"
     document.getElementById(t).style["visibility"] = "visible"
@@ -244,6 +260,7 @@ function update(dt) {
     document.getElementById("upg").innerHTML = `<b>Boost your point gain!</b><br>Cost: $${format(upgCost(player.upg))}<br><br>Bought: ${format(player.upg)}<br><i>Time left: ${formatTime(timeLeft())}</i>`
     //lootboxes
     document.getElementById("rup_text_2").innerHTML = document.getElementById("rup_text").innerHTML
+    document.getElementById("typing_field").innerHTML = t
     rarityThing()
     rUpgTick(dt)
     player.points = player.points.add(getPPS().times(dt))
