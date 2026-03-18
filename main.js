@@ -24,7 +24,7 @@ function initPlayer() {
 
 player = JSON.parse(localStorage.getItem("wngu-r"))
 
-if (player+'1'==='1'){player = initPlayer()}
+if (player+'1'==='null1'){player = initPlayer()}
 
 for (i in initPlayer()) {
     if (typeof(player[i])=="undefined"){player[i] = initPlayer()[i]}
